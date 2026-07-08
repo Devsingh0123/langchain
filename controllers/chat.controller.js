@@ -1,19 +1,20 @@
-import { HumanMessage, SystemMessage } from "@langchain/core/messages";
+
 import llm from "../config/groq.js";
 import chatPrompt from "../prompts/chat.prompt.js";
-import { StringOutputParser } from "@langchain/core/output_parsers";
+
+import profileSchema from "../schemas/profile.schema.js";
 
 export const chatController = async (req, res) => {
   try {
     const { chat_input } = req.body;
+    const structuredLLM = llm.withStructuredOutput(profileSchema);
 
     const chain = chatPrompt
-    .pipe(llm)
-    .pipe(new StringOutputParser());
+    .pipe(structuredLLM)
+    
     const response = await chain.invoke({
         question: chat_input,
-        name:"jarvis",
-        role:"coading"
+        
     });
 
     res.status(200).json({ response });

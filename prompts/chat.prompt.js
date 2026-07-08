@@ -3,7 +3,8 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 const chatPrompt= ChatPromptTemplate.fromMessages([
     [
         "system",
-         " Yoy are {name} and You are a helpful {role} tutor."
+         `You are an assistant.
+          Extract the user's profile from the question.`
     ],
     [
 
