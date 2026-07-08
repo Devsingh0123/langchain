@@ -1,27 +1,21 @@
-
-import { HumanMessage } from "@langchain/core/messages"
+import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import llm from "../config/groq.js";
+import chatPrompt from "../prompts/chat.prompt.js";
 
+export const chatController = async (req, res) => {
+  try {
+    const { chat_input } = req.body;
 
-export const chatController = async (req, res)=>{
+    const chain = chatPrompt.pipe(llm);
+    const response = await chain.invoke({
+        question: chat_input,
+        name:"jarvis",
+        role:"coading"
+    });
 
-    try {
-
-          const {chat_input} = req.body;
-    console.log(chat_input)
-    const response =await llm.invoke([
-        new HumanMessage(chat_input)
-    ])
-
-    console.log(response.content)
-
-    res.json({response:response.content})
-        
-    } catch (error) {
-        console.log(err)
-        res.status(500).json({message:"something went wrong"})
-    }
-
-  
-
-}
+    res.status(200).json({ response: response.content });
+  } catch (error) {
+    console.log(err);
+    res.status(500).json({ message: "something went wrong" });
+  }
+};
