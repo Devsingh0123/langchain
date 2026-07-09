@@ -1,16 +1,24 @@
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  MessagesPlaceholder,
+} from "@langchain/core/prompts";
 
-const chatPrompt= ChatPromptTemplate.fromMessages([
-    [
-        "system",
-         `You are an assistant.
-          Extract the user's profile from the question.`
-    ],
-    [
+const chatPrompt = ChatPromptTemplate.fromMessages([
+  ["system", " You are jarvis and You are a helpful AI assistant"],
 
-         "human",
-        "{question}"
-    ]
-])
+  new MessagesPlaceholder("history"),
+   [
+    "human",
+    `
+    Web Information:
+    {webData}
+
+    User Question:
+    {question}
+    `
+  ]
+]);
+
+// console.log(chatPrompt)
 
 export default chatPrompt;
